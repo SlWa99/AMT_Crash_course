@@ -4,9 +4,7 @@ import ch.heigvd.services.ProbeService;
 import io.quarkus.qute.Template;
 import io.quarkus.qute.TemplateInstance;
 import jakarta.inject.Inject;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 
 @Path("/")
@@ -45,5 +43,12 @@ public class ProbeResource {
         return probesPage.data("probeList", probeList);
     }
 
+    @POST
+    @Path("/probes")
+    @Produces(MediaType.TEXT_HTML)
+    public TemplateInstance registerProbe(@FormParam("url") String url) {
+        var probe = probeService.getOrCreateProbe(url);
+        return probesPage.data("probeList", probeService.listProbes());
+    }
 
 }
